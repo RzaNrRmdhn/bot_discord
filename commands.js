@@ -20,6 +20,15 @@ const commands = [
             .setRequired(true)
     )
     .toJSON(),
+    new SlashCommandBuilder()
+        .setName('testing')
+        .setDescription('Cek koneksi bot ke Discord.')
+        .addStringOption(option =>
+            option.setName('message')
+            .setDescription('Pesan untuk dikirim')
+            .setRequired(true))
+    .toJSON(),
+
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);

@@ -1,5 +1,18 @@
 import { Client, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
+import express from "express";
+import fetch from "node-fetch";
+
+const app = express();
+
+app.get("/", (req, res) => {
+    res.send("Bot is alive!");
+});
+
+app.listen(3000, () => {
+    console.log("Express server running...");
+});
+
 dotenv.config();
 
 const client = new Client({
@@ -18,48 +31,10 @@ const gambar = [
     'https://i.pinimg.com/1200x/53/9f/76/539f76d3bc874c5f8416e899ca5668ec.jpg'
 ]
 
-const wrapAndIndent = (text) => {
-    const maxLength = 75;
-    const words = text.split(' ');
-    let linePart = '';
-    const lines = [];
-
-    words.forEach(word => {
-        if ((linePart + ' ' + word).length > maxLength) {
-            lines.push(linePart.trim());
-            linePart = word;
-        } else {
-            linePart += ' ' + word;
-        }
-    });
-
-    if (linePart) lines.push(linePart.trim());
-    if (lines.length === 1) {
-        return `\t• ${lines[0]}`;
-    } else {
-        return `\t• ${lines[0]}\n${lines.slice(1).map(l => `\t  ${l}`).join('\n')}`;
-    }
-};
-
 const formatMessageText = (message) => {
-    return message
-        .replace(/[.!?] (?=[A-Z#])/g, match => `${match.trim()}\n`)
-        .split('\n')
-        .map(line => {
-            const trimmed = line.trim();
-
-            if (trimmed.includes(' - ')) {
-                const parts = trimmed.split(' - ');
-                const intro = parts.shift().trim();
-                const bullets = parts.map(item => wrapAndIndent(item)).join('\n');
-                return [intro, bullets].filter(Boolean).join('\n');
-
-            } else if (/^-\s+/.test(trimmed)) {
-                return wrapAndIndent(trimmed.slice(2).trim());
-            } else {
-                return trimmed;
-            }
-            }).join('\n');
+    return message.replace(/([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
+        return p1 ? `${p1}\n` : '\n';
+    });
 };
 
 const handleCommand = async (interaction, options) => {
@@ -105,19 +80,39 @@ client.on('interactionCreate', async (interaction) => {
         return;
     }
 
+    if (interaction.commandName === 'testing') {
+        await handleCommand(interaction, {
+            targetChannelName: 'command-log',
+            successMsg: '✅ Koneksi bot ke Discord berhasil! Pesan: {channel}',
+        });
+    }
+
     if (interaction.commandName === 'pengumuman') {
         await handleCommand(interaction, {
-            targetChannelName: '✧⋅📣┃𝐀𝐧𝐧𝐨𝐮𝐧𝐜𝐞𝐦𝐞𝐧𝐭', // Ganti kalau mau
+            // targetChannelName: 'command-log',
+            targetChannelName: '✧⋅📣┃𝐀𝐧𝐧𝐨𝐮𝐧𝐜𝐞𝐦𝐞𝐧𝐭',
             successMsg: '✅ Pengumuman terkirim ke {channel}!',
         });
     }
 
     if (interaction.commandName === 'update_rules') {
         await handleCommand(interaction, {
-            targetChannelName: '✧⋅📣┃𝐑𝐮𝐥𝐞𝐬', // Ganti kalau mau rules beda channel
+            targetChannelName: '✧⋅📣┃𝐑𝐮𝐥𝐞𝐬',
             successMsg: '✅ Rules berhasil diupdate di {channel}!',
         });
     }
 });
 
 client.login(process.env.BOT_TOKEN);
+
+const URL =
+    "https://769fb8ee-6224-4add-a217-1edf6a7398b2-00-1c7kj6o4gopvb.sisko.replit.dev/";
+
+setInterval(
+    () => {
+        fetch(URL)
+            .then((res) => console.log(`Self-ping status: ${res.status}`))
+            .catch((err) => console.error(`Self-ping error: ${err}`));
+    },
+    2 * 60 * 1000,
+);
