@@ -106,7 +106,7 @@ client.on('interactionCreate', async (interaction) => {
 client.login(process.env.BOT_TOKEN);
 
 const URL =
-    "https://769fb8ee-6224-4add-a217-1edf6a7398b2-00-1c7kj6o4gopvb.sisko.replit.dev/";
+    "https://1291dbff-83cf-4690-8151-eab708bd0564-00-3tys67iogwfym.pike.replit.dev/";
 
 setInterval(
     () => {
