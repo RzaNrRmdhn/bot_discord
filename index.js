@@ -107,14 +107,14 @@ client.on('interactionCreate', async (interaction) => {
 
     if (interaction.commandName === 'pengumuman') {
         await handleCommand(interaction, {
-            targetChannelName: 'command-log', // Ganti kalau mau
+            targetChannelName: '✧⋅📣┃𝐀𝐧𝐧𝐨𝐮𝐧𝐜𝐞𝐦𝐞𝐧𝐭', // Ganti kalau mau
             successMsg: '✅ Pengumuman terkirim ke {channel}!',
         });
     }
 
     if (interaction.commandName === 'update_rules') {
         await handleCommand(interaction, {
-            targetChannelName: 'command-log', // Ganti kalau mau rules beda channel
+            targetChannelName: '✧⋅📣┃𝐑𝐮𝐥𝐞𝐬', // Ganti kalau mau rules beda channel
             successMsg: '✅ Rules berhasil diupdate di {channel}!',
         });
     }
