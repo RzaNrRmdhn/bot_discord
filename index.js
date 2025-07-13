@@ -13,7 +13,7 @@ app.listen(3000, () => {
     console.log("Express server running...");
 });
 
-// dotenv.config();
+dotenv.config();
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
@@ -103,18 +103,4 @@ client.on('interactionCreate', async (interaction) => {
     }
 });
 
-console.log("TOKEN VALUE:", process.env.TOKEN);
-console.log("TOKEN LENGTH:", process.env.TOKEN?.length);
 client.login(process.env.BOT_TOKEN);
-
-const URL =
-    "https://1291dbff-83cf-4690-8151-eab708bd0564-00-3tys67iogwfym.pike.replit.dev/";
-
-setInterval(
-    () => {
-        fetch(URL)
-            .then((res) => console.log(`Self-ping status: ${res.status}`))
-            .catch((err) => console.error(`Self-ping error: ${err}`));
-    },
-    2 * 60 * 1000,
-);
