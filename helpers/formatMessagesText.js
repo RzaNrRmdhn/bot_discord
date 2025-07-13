@@ -1,6 +1,5 @@
 export default function formatMessageText(message) {
-    return message.replace(
-        /(?<!\d)([.!?])\s+|\s+(?=[*#-]|__)/g,
-        (match, p1) => p1 ? `${p1}\n` : '\n'
-    ).replace(/\\\s*/g, '\n')
+    return message
+        .replace(/\\\s*/g, '\n')
+        .replace(/\s+(?=[#*-])/g, '\n');
 }

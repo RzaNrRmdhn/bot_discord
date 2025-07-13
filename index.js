@@ -1,9 +1,7 @@
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
-
-import sendMessages from './commands/sendMessages.js';
-import sendMessagesHandler from './handlers/sendMessages.js';
+import registry from './commands/index.js';
 
 dotenv.config();
 
@@ -15,12 +13,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
 
-const sendMessagesCommand = sendMessages();
-
-client.commands.set(sendMessagesCommand.data.name, {
-    data: sendMessagesCommand.data,
-    execute: sendMessagesHandler,
-});
+for (const { command, handler } of registry) {
+    client.commands.set(command.data.name, {
+        data: command.data,
+        execute: handler,
+    });
+}
 
 client.once('ready', () => {
     console.log(`✅ Bot ready as ${client.user.tag}`);
