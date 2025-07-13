@@ -1,7 +1,10 @@
-// handlers/sendMessages.js
 import formatMessageText from '../helpers/formatMessagesText.js';
+import checkChannel from '../auth/checkChannels.js';
 
 export default async function execute(interaction) {
+    const isAllowed = checkChannel(interaction, 'command-log');
+    if (!isAllowed) return;
+
     const message = interaction.options.getString('message');
     const formatted = formatMessageText(message);
 

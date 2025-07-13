@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 
 import sendMessages from './commands/sendMessages.js';
 import replyMessage from './commands/replyMessages.js';
+import helpCommand from './commands/help.js';
 
 dotenv.config();
 
-const commands = [replyMessage(), sendMessages()];
+const commands = [replyMessage(), sendMessages(), helpCommand()];
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
 (async () => {
