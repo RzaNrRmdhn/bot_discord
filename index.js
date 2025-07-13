@@ -103,6 +103,8 @@ client.on('interactionCreate', async (interaction) => {
     }
 });
 
+console.log("TOKEN VALUE:", process.env.TOKEN);
+console.log("TOKEN LENGTH:", process.env.TOKEN?.length);
 client.login(process.env.BOT_TOKEN);
 
 const URL =
