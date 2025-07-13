@@ -1,106 +1,98 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import {
+  Client,
+  GatewayIntentBits,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
+  Events,
+} from 'discord.js';
 import dotenv from 'dotenv';
-import express from "express";
-import fetch from "node-fetch";
-
-const app = express();
-
-app.get("/", (req, res) => {
-    res.send("Bot is alive!");
-});
-
-app.listen(3000, () => {
-    console.log("Express server running...");
-});
+import express from 'express';
 
 dotenv.config();
 
+const app = express();
+app.get("/", (req, res) => res.send("Bot is alive!"));
+app.listen(3000, () => console.log("Express server running..."));
+
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds],
+  intents: [GatewayIntentBits.Guilds],
 });
 
 client.once('ready', () => {
-    console.log(`✅ Bot ready as ${client.user.tag}`);
+  console.log(`✅ Bot ready as ${client.user.tag}`);
 });
 
-// const gambar = [
-//     'https://i.pinimg.com/1200x/70/ac/33/70ac33943d25bcb07439a0a725ee37e2.jpg',
-//     'https://i.pinimg.com/1200x/30/49/46/304946c4edd7d8f516f8ced526adae57.jpg',
-//     'https://i.pinimg.com/1200x/4f/9d/71/4f9d712fa437fb0d22dcd8786f84d21f.jpg',
-//     'https://i.pinimg.com/1200x/c2/8e/7e/c28e7e971f1359ea116b860145f68701.jpg',
-//     'https://i.pinimg.com/1200x/53/9f/76/539f76d3bc874c5f8416e899ca5668ec.jpg'
-// ]
+// Penyimpanan data Modal
+const modalData = new Map();
 
+// Format helper
 const formatMessageText = (message) => {
-    return message.replace(/(?<!\d)([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
-        return p1 ? `${p1}\n` : '\n';
-    });
+  return message.replace(/(?<!\d)([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
+    return p1 ? `${p1}\n` : '\n';
+  });
 };
 
-const handleCommand = async (interaction, options) => {
-    const { targetChannelName, successMsg } = options;
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isChatInputCommand()) {
+    if (interaction.commandName === 'combo_send') {
+      const targetChannelId = interaction.options.getChannel('target_channel').id;
+      const attachment = interaction.options.getAttachment('attachment');
 
-    const message = interaction.options.getString('message');
-    const format_messages = formatMessageText(message);
+      // Simpan ke Map
+      modalData.set(interaction.id, {
+        targetChannelId,
+        attachmentUrl: attachment ? attachment.url : null,
+      });
 
-    const targetChannel = interaction.guild.channels.cache.find(
-        ch => ch.name === targetChannelName
-    );
+      // Buat Modal
+      const modal = new ModalBuilder()
+        .setCustomId(`comboModal_${interaction.id}`)
+        .setTitle('Input Pesan Multi-line');
 
-    if (!targetChannel) {
-        await interaction.reply({
-            content: `❌ Channel #${targetChannelName} tidak ditemukan!`,
-            ephemeral: true,
-        });
+      const input = new TextInputBuilder()
+        .setCustomId('messageInput')
+        .setLabel('Isi pesan multi-line:')
+        .setStyle(TextInputStyle.Paragraph)
+        .setRequired(true);
+
+      const row = new ActionRowBuilder().addComponents(input);
+      modal.addComponents(row);
+
+      await interaction.showModal(modal);
+    }
+  }
+
+  if (interaction.isModalSubmit()) {
+    if (interaction.customId.startsWith('comboModal_')) {
+      const interactionId = interaction.customId.split('_')[1];
+      const data = modalData.get(interactionId);
+
+      if (!data) {
+        await interaction.reply({ content: '❌ Data modal hilang!', ephemeral: true });
         return;
+      }
+
+      const targetChannel = await interaction.guild.channels.fetch(data.targetChannelId);
+      const attachmentUrl = data.attachmentUrl;
+
+      const message = interaction.fields.getTextInputValue('messageInput');
+      const formattedMessage = formatMessageText(message);
+
+      await targetChannel.send({
+        content: formattedMessage,
+        files: attachmentUrl ? [attachmentUrl] : [],
+      });
+
+      await interaction.reply({
+        content: `✅ Pesan dikirim ke <#${targetChannel.id}>!`,
+        ephemeral: true,
+      });
+
+      modalData.delete(interactionId);
     }
-
-    // const randomFile = gambar[Math.floor(Math.random() * gambar.length)];
-    await interaction.deferReply({ ephemeral: true });
-
-    await targetChannel.send({
-        content: format_messages,
-        // files: [randomFile],
-    });
-
-    await interaction.editReply({
-        content: successMsg.replace('{channel}', `#${targetChannel.name}`),
-    });
-};
-
-client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const allowedChannel = 'command-log';
-    if (interaction.channel.name !== allowedChannel) {
-        await interaction.reply({
-            content: `🚫 Command hanya bisa dipakai di #${allowedChannel}!`,
-            ephemeral: true,
-        });
-        return;
-    }
-
-    if (interaction.commandName === 'testing') {
-        await handleCommand(interaction, {
-            targetChannelName: 'command-log',
-            successMsg: '✅ Koneksi bot ke Discord berhasil! Pesan: {channel}',
-        });
-    }
-
-    if (interaction.commandName === 'pengumuman') {
-        await handleCommand(interaction, {
-            // targetChannelName: 'command-log',
-            targetChannelName: '✧⋅📣┃𝐀𝐧𝐧𝐨𝐮𝐧𝐜𝐞𝐦𝐞𝐧𝐭',
-            successMsg: '✅ Pengumuman terkirim ke {channel}!',
-        });
-    }
-
-    if (interaction.commandName === 'update_rules') {
-        await handleCommand(interaction, {
-            targetChannelName: '✧⋅📣┃𝐑𝐮𝐥𝐞𝐬',
-            successMsg: '✅ Rules berhasil diupdate di {channel}!',
-        });
-    }
+  }
 });
 
 client.login(process.env.BOT_TOKEN);

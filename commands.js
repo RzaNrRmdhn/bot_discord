@@ -4,31 +4,17 @@ dotenv.config();
 
 const commands = [
     new SlashCommandBuilder()
-        .setName('pengumuman')
-        .setDescription('Kirim pengumuman ke #announcements.')
-        .addStringOption(option =>
-            option.setName('message')
-            .setDescription('Isi pengumuman')
+        .setName('combo_send')
+        .setDescription('Kirim pesan multi-line + lampiran ke channel.')
+        .addChannelOption(option =>
+            option.setName('target_channel')
+            .setDescription('Channel tujuan')
             .setRequired(true))
+        .addAttachmentOption(option =>
+            option.setName('attachment')
+            .setDescription('Lampiran opsional')
+            .setRequired(false))
     .toJSON(),
-    new SlashCommandBuilder()
-        .setName('update_rules')
-        .setDescription('Update rules server.')
-        .addStringOption(option =>
-            option.setName('message')
-            .setDescription('Isi rules baru')
-            .setRequired(true)
-    )
-    .toJSON(),
-    new SlashCommandBuilder()
-        .setName('testing')
-        .setDescription('Cek koneksi bot ke Discord.')
-        .addStringOption(option =>
-            option.setName('message')
-            .setDescription('Pesan untuk dikirim')
-            .setRequired(true))
-    .toJSON(),
-
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
