@@ -32,7 +32,7 @@ client.once('ready', () => {
 // ]
 
 const formatMessageText = (message) => {
-    return message.replace(/([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
+    return message.replace(/(?<!\d)([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
         return p1 ? `${p1}\n` : '\n';
     });
 };
