@@ -13,7 +13,7 @@ app.listen(3000, () => {
     console.log("Express server running...");
 });
 
-dotenv.config();
+// dotenv.config();
 
 const client = new Client({
     intents: [GatewayIntentBits.Guilds],
