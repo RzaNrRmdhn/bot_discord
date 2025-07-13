@@ -1,5 +1,8 @@
 // handlers/replyMessage.js
 export default async function execute(interaction) {
+    const isAllowed = checkChannel(interaction, 'command-log');
+    if (!isAllowed) return;
+    
     const messageId = interaction.options.getString('message_id');
     const replyText = interaction.options.getString('message');
     const targetChannel = interaction.options.getChannel('target_channel');
