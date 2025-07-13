@@ -23,13 +23,13 @@ client.once('ready', () => {
     console.log(`✅ Bot ready as ${client.user.tag}`);
 });
 
-const gambar = [
-    'https://i.pinimg.com/1200x/70/ac/33/70ac33943d25bcb07439a0a725ee37e2.jpg',
-    'https://i.pinimg.com/1200x/30/49/46/304946c4edd7d8f516f8ced526adae57.jpg',
-    'https://i.pinimg.com/1200x/4f/9d/71/4f9d712fa437fb0d22dcd8786f84d21f.jpg',
-    'https://i.pinimg.com/1200x/c2/8e/7e/c28e7e971f1359ea116b860145f68701.jpg',
-    'https://i.pinimg.com/1200x/53/9f/76/539f76d3bc874c5f8416e899ca5668ec.jpg'
-]
+// const gambar = [
+//     'https://i.pinimg.com/1200x/70/ac/33/70ac33943d25bcb07439a0a725ee37e2.jpg',
+//     'https://i.pinimg.com/1200x/30/49/46/304946c4edd7d8f516f8ced526adae57.jpg',
+//     'https://i.pinimg.com/1200x/4f/9d/71/4f9d712fa437fb0d22dcd8786f84d21f.jpg',
+//     'https://i.pinimg.com/1200x/c2/8e/7e/c28e7e971f1359ea116b860145f68701.jpg',
+//     'https://i.pinimg.com/1200x/53/9f/76/539f76d3bc874c5f8416e899ca5668ec.jpg'
+// ]
 
 const formatMessageText = (message) => {
     return message.replace(/([.!?])\s+|\s+(?=[*#-]|__)/g, (match, p1) => {
@@ -55,12 +55,12 @@ const handleCommand = async (interaction, options) => {
         return;
     }
 
-    const randomFile = gambar[Math.floor(Math.random() * gambar.length)];
+    // const randomFile = gambar[Math.floor(Math.random() * gambar.length)];
     await interaction.deferReply({ ephemeral: true });
 
     await targetChannel.send({
         content: format_messages,
-        files: [randomFile],
+        // files: [randomFile],
     });
 
     await interaction.editReply({
