@@ -2,6 +2,9 @@ import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
 import registry from './commands/index.js';
+import handleMessageCreate from './events/createMessages.js';
+import handleCreateChannel from './events/createChannel.js';
+import blacklist from './data/toxicWords.js';
 
 dotenv.config();
 
@@ -9,7 +12,12 @@ const app = express();
 app.get('/', (_, res) => res.send('Bot is alive!'));
 app.listen(3000, () => console.log('✅ Express server running...'));
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+    ],
+});
 
 client.commands = new Collection();
 
@@ -40,5 +48,19 @@ client.on('interactionCreate', async interaction => {
         });
     }
 });
+
+client.on('messageCreate', handleMessageCreate);
+client.on('channelCreate', handleCreateChannel);
+
+client.on('messageCreate', async message => {
+
+    if(message.author.bot) return;
+
+    if(message.content == '!listMuted'){
+        const list = blacklist.map(word => `- ${word}`).join('\n');
+
+        await message.reply(`🧹 **Daftar kata toxic:**\n\`\`\`\n${list}\n\`\`\``);
+    }
+})
 
 client.login(process.env.BOT_TOKEN);
