@@ -6,6 +6,8 @@ export default async function handleMessageCreate(message) {
 
     const { isToxic } = checkToxicWord(message.content);
 
+    const muteTimers = new Map();
+
     if (isToxic) {
         try {
             await message.delete();
