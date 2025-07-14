@@ -1,12 +1,14 @@
 import checkToxicWord from '../helpers/checkToxicWords.js';
 import { EmbedBuilder } from 'discord.js';
 
+const muteTimers = new Map();
+
 export default async function handleMessageCreate(message) {
     if (message.author.bot) return;
 
     const { isToxic } = checkToxicWord(message.content);
 
-    const muteTimers = new Map();
+    
 
     if (isToxic) {
         try {
