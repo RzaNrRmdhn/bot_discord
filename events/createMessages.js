@@ -50,13 +50,28 @@ export default async function handleMessageCreate(message) {
             }
 
             const timeout = setTimeout(async () => {
-            const freshMember = await message.guild.members.fetch(userId);
-            if (freshMember.roles.cache.has(muteRole.id)) {
-                await freshMember.roles.remove(muteRole).catch(console.error);
-                console.log(`✅ Unmute ${freshMember.user.tag}`);
-            }
+                console.log('⏰ Timer jalan, fetching member...');
+                const freshMember = await message.guild.members.fetch(userId)
+                    .catch(err => {
+                    console.error('❌ Fetch member error:', err);
+                    });
+
+                if (!freshMember) return;
+
+                if (freshMember.roles.cache.has(muteRole.id)) {
+                    await freshMember.roles.remove(muteRole)
+                    .then(() => {
+                        console.log(`✅ Unmute ${freshMember.user.tag}`);
+                    })
+                    .catch(err => {
+                        console.error('❌ Gagal remove Muted:', err);
+                    });
+                } else {
+                    console.log(`ℹ️ ${freshMember.user.tag} sudah tidak punya Muted`);
+                }
+
                 muteTimers.delete(userId);
-            }, 60 * 1000);
+            }, 5 * 1000);
 
             muteTimers.set(userId, timeout);
 
