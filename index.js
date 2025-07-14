@@ -15,6 +15,7 @@ app.listen(3000, () => console.log('✅ Express server running...'));
 
 const client = new Client({ intents: [
         GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
     ],
