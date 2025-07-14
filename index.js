@@ -65,35 +65,6 @@ client.on('messageCreate', async message => {
     }
 })
 
-client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
-
-  // COMMAND TEST: !welcome
-  if (message.content === '!welcome') {
-    // Cari channel command-log
-    const commandLogChannel = message.guild.channels.cache.find(
-      ch => ch.name === 'command-log'
-    );
-
-    if (!commandLogChannel) {
-      return message.reply('❌ Channel `command-log` tidak ditemukan!');
-    }
-
-   const hardcodedMessage = `
-### 👋Haloow Welkam!! <@${member.id}>!
-============================================
-Salken Aku Nevas (≧∇≦)!
-- Silakan kenalan di <#1392801305424171008>
-- Kalau ambil role di <#1340643587041398876>!
-=============================================
-Moga Betah yawwww []~(￣▽￣)~*
-`;
-
-        await welcomeChannel.send({ content: hardcodedMessage });
-    await message.reply('✅ Pesan welcome sudah dikirim ke #command-log');
-  }
-});
-
 client.on('guildMemberAdd', handleOnboarding)
 
 client.login(process.env.BOT_TOKEN);
