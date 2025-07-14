@@ -4,6 +4,7 @@ import express from 'express';
 import registry from './commands/index.js';
 import handleMessageCreate from './events/createMessages.js';
 import handleCreateChannel from './events/createChannel.js';
+import handleOnboarding from './events/onboarding.js';
 import blacklist from './data/toxicWords.js';
 
 dotenv.config();
@@ -62,5 +63,7 @@ client.on('messageCreate', async message => {
         await message.reply(`🧹 **Daftar kata toxic:**\n\`\`\`\n${list}\n\`\`\``);
     }
 })
+
+client.on('guildMemberAdd', handleOnboarding)
 
 client.login(process.env.BOT_TOKEN);
