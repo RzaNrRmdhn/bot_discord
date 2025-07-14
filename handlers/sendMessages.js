@@ -1,5 +1,5 @@
 import formatMessageText from '../helpers/formatMessagesText.js';
-import checkChannel from '../auth/checkChannels.js';
+import checkChannel from '../middleware/checkChannels.js';
 
 export default async function execute(interaction) {
     const isAllowed = checkChannel(interaction, 'command-log');
