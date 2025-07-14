@@ -22,6 +22,7 @@ export default async function handleMessageCreate(message) {
                 return;
             }
 
+            const userId = message.author.id;
             await message.member.roles.add(muteRole);
 
             const embed = new EmbedBuilder()
@@ -40,12 +41,20 @@ export default async function handleMessageCreate(message) {
                 { embeds: [embed] }
             );
 
-            setTimeout(async () => {
-                if (message.member.roles.cache.has(muteRole.id)) {
-                    await message.member.roles.remove(muteRole).catch(console.error);
-                    console.log(`✅ Unmute ${message.author.tag}`);
-                }
-            }, 1 * 60 * 1000);
+            if (muteTimers.has(userId)) {
+                clearTimeout(muteTimers.get(userId));
+            }
+
+            const timeout = setTimeout(async () => {
+            const freshMember = await message.guild.members.fetch(userId);
+            if (freshMember.roles.cache.has(muteRole.id)) {
+                await freshMember.roles.remove(muteRole).catch(console.error);
+                console.log(`✅ Unmute ${freshMember.user.tag}`);
+            }
+                muteTimers.delete(userId);
+            }, 60 * 1000);
+
+            muteTimers.set(userId, timeout);
 
         } catch (err) {
             console.error('Gagal mute user:', err);
