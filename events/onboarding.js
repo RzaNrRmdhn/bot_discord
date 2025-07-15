@@ -9,10 +9,12 @@ export default async function handleOnboarding(member) {
 ### 👋Haloow Welkam!! <@${member.id}>!
 ============================================
 Salken Aku Nevas (≧∇≦)!
-- Silakan kenalan di <#1392801305424171008>
+- Silahkan kenalan di <#1392801305424171008>
 - Kalau ambil role di <#1340643587041398876>!
+- Jangan lupa baca Rules di <#1330843237505830994>!
+- dan Nantikan event seru dari kami lewat <#1352894276811362325> yaww!
 =============================================
-Moga Betah yawwww []~(￣▽￣)~*
+Thank u, Moga Betah yawwww []~(￣▽￣)~*
 `;
 
         await welcomeChannel.send({ content: hardcodedMessage });
