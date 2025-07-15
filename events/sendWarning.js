@@ -3,12 +3,10 @@ import { EmbedBuilder } from 'discord.js';
 
 const muteTimers = new Map();
 
-export default async function handleMessageCreate(message) {
+export default async function sendWarning(message) {
     if (message.author.bot) return;
 
     const { isToxic } = checkToxicWord(message.content);
-
-    
 
     if (isToxic) {
         try {
