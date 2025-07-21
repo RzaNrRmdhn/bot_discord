@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits} from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
 import events from './events/handlerEvents.js';
+import { sendReportPanel } from './components/buttonSendPanel.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const client = new Client({ intents: [
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates,
     ],
 });
 
@@ -25,5 +27,13 @@ events.forEach(({ event, handler }) => {
     client.on(event, handler);
     console.log(`Loaded handler for ${event}`);
 });
+
+client.once('ready', async () => {
+    console.log(`${client.user.tag} ready!`);
+
+    const reportChannel = client.channels.cache.get('1396768046101827655'); // #report
+    await sendReportPanel(reportChannel);
+});
+
 
 client.login(process.env.BOT_TOKEN);
