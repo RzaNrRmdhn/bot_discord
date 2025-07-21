@@ -28,12 +28,12 @@ events.forEach(({ event, handler }) => {
     console.log(`Loaded handler for ${event}`);
 });
 
-client.once('ready', async () => {
-    console.log(`${client.user.tag} ready!`);
+// client.once('ready', async () => {
+//     console.log(`${client.user.tag} ready!`);
 
-    const reportChannel = client.channels.cache.get('1396768046101827655'); // #report
-    await sendReportPanel(reportChannel);
-});
+//     const reportChannel = client.channels.cache.get('1396768046101827655'); // #report
+//     await sendReportPanel(reportChannel);
+// });
 
 
 client.login(process.env.BOT_TOKEN);
