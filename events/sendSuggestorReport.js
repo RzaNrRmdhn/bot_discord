@@ -41,7 +41,7 @@ export default async function handleSuggestorReport(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('🚨 Laporan Baru')
             .setDescription(report)
-            .setColor('#ff0000ff')
+            .setColor('#FF0000')
             .setFooter({ text: `Dari: ${interaction.user.tag}` })
             .setTimestamp();
 
