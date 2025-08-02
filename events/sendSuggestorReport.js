@@ -41,7 +41,7 @@ export default async function handleSuggestorReport(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('🚨 Laporan Baru')
             .setDescription(report)
-            .setColor('Red')
+            .setColor('#ff0000ff')
             .setFooter({ text: `Dari: ${interaction.user.tag}` })
             .setTimestamp();
 
@@ -66,7 +66,7 @@ export default async function handleSuggestorReport(interaction) {
         const embed = new EmbedBuilder()
             .setTitle('💡 Saran Baru')
             .setDescription(suggest)
-            .setColor('blue')
+            .setColor('#0000FF')
             .setFooter({ text: `Dari: ${interaction.user.tag}` })
             .setTimestamp();
 

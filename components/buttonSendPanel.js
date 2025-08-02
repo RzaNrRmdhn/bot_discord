@@ -16,7 +16,7 @@ export async function sendReportPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00AAFF')
         .setTitle('📣 Panel Laporan & Saran')
-        .setDescription('Gunakan tombol di bawah untuk membuat laporan masalah atau memberikan saran.')
+        .setDescription('Gunakan tombol di bawah untuk membuat laporan masalah atau memberikan saran/Roles Baru.')
         .setFooter({ text: 'Nevas Bot • Stay Manizz!' })
         .setTimestamp();
 

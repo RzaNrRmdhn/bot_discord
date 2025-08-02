@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits} from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
 import events from './events/handlerEvents.js';
-import { sendReportPanel } from './components/buttonSendPanel.js';
+// import { sendReportPanel } from './components/buttonSendPanel.js';
 
 dotenv.config();
 
@@ -31,7 +31,7 @@ events.forEach(({ event, handler }) => {
 // client.once('ready', async () => {
 //     console.log(`${client.user.tag} ready!`);
 
-//     const reportChannel = client.channels.cache.get('1396768046101827655'); // #report
+//     const reportChannel = client.channels.cache.get('1377226878586454118'); // #report
 //     await sendReportPanel(reportChannel);
 // });
 
