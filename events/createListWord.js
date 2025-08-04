@@ -1,11 +1,20 @@
 import blacklist from "../data/toxicWords.js";
 
-export default async function handleListWord(message){
-    if(message.author.bot) return;
+export default async function handleListWord(interaction){
+    if(!interaction.isButton()) return;
+    
+    if(interaction.customId === 'btn_listword'){
+        const toxicWords = blacklist.map(word => `- ${word}`).join('\n');
 
-    if(message.content == '!listMuted'){
-        const list = blacklist.map(word => `- ${word}`).join('\n');
+        const embed = {
+            color: 0xFF0000,
+            title: 'Daftar Kata Toxic',
+            description: `Berikut adalah daftar kata toxic yang telah ditetapkan:\n\n${toxicWords}`,
+            footer: {
+                text: 'Harap gunakan kata-kata ini dengan bijak.',
+            },
+        };
 
-        await message.reply(`🧹 **Daftar kata toxic:**\n\`\`\`\n${list}\n\`\`\``);
+        await interaction.reply({ embeds: [embed], ephemeral: true });
     }
 } 
