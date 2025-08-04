@@ -2,10 +2,11 @@ import sendWarning from './sendWarning.js';
 import handleCreateChannel from './createChannel.js';
 import handleOnboarding from './onboarding.js';
 import handleListWord from './createListWord.js';
-import sendMessages from './sendMessages.js';
-import handleShowHelp from './showHelp.js';
+import handleSendMessages from './sendMessages.js';
 import handleNotifOpenChat from './sendNotifOpenChat.js';
 import handleSuggestorReport from './sendSuggestorReport.js';
+import handleSetupMessagePanel from './setupMessagesPanel.js';
+import handleMuteTags from './muteTagsEveryone.js';
 
 export default [
     {
@@ -21,16 +22,12 @@ export default [
         handler: handleOnboarding,
     },
     {
-        event: 'messageCreate',
+        event: 'interactionCreate',
         handler: handleListWord,
     },
     {
-        event: 'messageCreate',
-        handler: sendMessages,
-    },
-    {
-        event: 'messageCreate',
-        handler: handleShowHelp,
+        event: 'interactionCreate',
+        handler: handleSendMessages,
     },
     {
         event: 'voiceStateUpdate',
@@ -40,4 +37,12 @@ export default [
         event: 'interactionCreate',
         handler: handleSuggestorReport,
     },
+    {
+        event: 'messageCreate',
+        handler: handleSetupMessagePanel,
+    },
+    {
+        event: 'messageCreate',
+        handler: handleMuteTags,
+    }
 ]
